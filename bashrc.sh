@@ -9,3 +9,8 @@ function openai-chatgpt()
 {
     python3 -m openaitools.chatgpt.chatcli
 }
+
+function openai-dalle()
+{
+    python3 -m openaitools.dalle.dallecli $@
+}
