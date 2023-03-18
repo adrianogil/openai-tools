@@ -1,0 +1,5 @@
+{
+    "DIR_MACRO": "OPENAI_TOOLS_DIR",
+    "PROJECT_NAME": "openai-tools",
+    "BASHRC": "bashrc.sh"
+}
