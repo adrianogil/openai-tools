@@ -7,8 +7,9 @@ fi
 
 function openai-chatgpt()
 {
-    python3 -m openaitools.chatgpt.chatcli
+    screen -S chatgpt -dm python3 -m openaitools.chatgpt.chatcli
 }
+
 
 function openai-dalle()
 {
