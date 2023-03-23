@@ -7,7 +7,12 @@ fi
 
 function openai-chatgpt()
 {
-    screen -S chatgpt -dm python3 -m openaitools.chatgpt.chatcli
+    python3 -m openaitools.chatgpt.chatcli
+}
+
+function openai-chatgpt-screen()
+{
+    screen -S chatgpt -dm openai-chatgpt
 }
 
 
