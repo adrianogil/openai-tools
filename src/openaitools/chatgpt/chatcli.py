@@ -81,6 +81,11 @@ def start_chat_loop():
     while user_input != "exit" and user_input != "q":
         if user_input == "save as note":
             save_markdown_note()
+        elif user_input.startswith("save file as "):
+            save_file_name = user_input[13:]
+            with open(save_file_name, 'w') as file_handler:
+                file_handler.write(chatgpt_output)
+            print(f"Last message saved as {save_file_name}")
         else:
             chatgpt_output = get_chatgpt_output(user_input)
             print(chatgpt_output)
