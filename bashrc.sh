@@ -20,3 +20,8 @@ function openai-dalle()
 {
     python3 -m openaitools.dalle.dallecli $@
 }
+
+function openai-chatgpt-english-translate()
+{
+    python3 -m openaitools.chatgpt.languages.english.translateto $1
+}
