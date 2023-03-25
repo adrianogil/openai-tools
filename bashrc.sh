@@ -25,3 +25,8 @@ function openai-chatgpt-english-translate()
 {
     python3 -m openaitools.chatgpt.languages.english.translateto $1
 }
+
+function openai-chatgpt-french-translate()
+{
+    python3 -m openaitools.chatgpt.languages.french.translateto $1
+}
