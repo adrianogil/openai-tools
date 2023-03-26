@@ -10,11 +10,23 @@ function openai-chatgpt()
     python3 -m openaitools.chatgpt.chatcli
 }
 
+function openai-chatgpt-continue()
+{
+    chatgpt_dir=$CHATGPT_CHAT_BKP_DIR
+    if [ -z "$chatgpt_dir" ]
+    then
+        chatgpt_dir=$HOME/.chatgpt
+    fi
+
+    chatgpt_file=$(find ${chatgpt_dir} -name "*.json" | default-fuzzy-finder)
+
+    python3 -m openaitools.chatgpt.chatcli ${chatgpt_file}
+}
+
 function openai-chatgpt-screen()
 {
     screen -S chatgpt -dm openai-chatgpt
 }
-
 
 function openai-dalle()
 {

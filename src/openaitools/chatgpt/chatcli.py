@@ -21,9 +21,9 @@ folder_path = os.path.join(default_chat_data_folder, year_folder, month_folder, 
 if not os.path.exists(folder_path):
     os.makedirs(folder_path)
 
-messages = []
-
 note_data = {
+    "subject": "",
+    "messages": [],
     "prompt_index": 0,
     "markdown_data": f"""
 
@@ -35,14 +35,19 @@ note_data = {
 
 
 def get_chatgpt_output(user_input="Hello world!"):
-    messages.append({"role": "user", "content": user_input})
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+    note_data["messages"].append({"role": "user", "content": user_input})
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=note_data["messages"])
     chatgpt_output = completion.choices[0].message.content
-    messages.append({"role": "assistant", "content": chatgpt_output})
+    note_data["messages"].append({"role": "assistant", "content": chatgpt_output})
     
+    if note_data["subject"]:
+        file_name = f"{time_file_name} - {note_data['subject']}.json"
+    else:
+        file_name = f"{time_file_name}.json"
     data_path = os.path.join(folder_path, file_name)
     with open(data_path, 'w') as file_handler:
-         json.dump({"messages": messages}, file_handler)
+         json.dump({"messages": note_data["messages"]}, file_handler)
+
 
     note_data["prompt_index"] += 1
     note_data["markdown_data"] += f"""
@@ -79,7 +84,9 @@ def save_markdown_note():
 def start_chat_loop():
     user_input = input("> ").strip()
     while user_input != "exit" and user_input != "q":
-        if user_input == "save as note":
+        if user_input.startswith("set subject as "):
+            note_data["subject"] = user_input[15:]
+        elif user_input == "save as note":
             save_markdown_note()
         elif user_input.startswith("save file as "):
             save_file_name = user_input[13:]
@@ -93,4 +100,16 @@ def start_chat_loop():
 
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        chat_file = sys.argv[1]
+        file_name = os.path.basename(chat_file)
+        with open(chat_file, 'r') as file_handler:
+            chat_data = json.load(file_handler)
+            note_data["messages"] = chat_data["messages"]
+            for message in note_data["messages"]:
+                if message["role"] == "user":
+                    print(">", message["content"])
+                else:
+                    print(message["content"])
     start_chat_loop()    
