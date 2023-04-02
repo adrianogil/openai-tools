@@ -83,7 +83,7 @@ def save_markdown_note():
 
 def start_chat_loop():
     user_input = input("> ").strip()
-    while user_input != "exit" and user_input != "q":
+    while user_input not in ["exit", "q"]:
         if user_input.startswith("set subject as "):
             note_data["subject"] = user_input[15:]
         elif user_input == "save as note":
@@ -112,4 +112,13 @@ if __name__ == '__main__':
                     print(">", message["content"])
                 else:
                     print(message["content"])
+        if len(sys.argv) > 2:
+            attachment_file = sys.argv[2]
+            with open(attachment_file, 'r') as file_handler:
+                lines = file_handler.readlines()
+            note_data["messages"].append({
+                "role": "user",
+                "content": f"I'll present a file in path '{attachment_file}' with the content below. \n\n" + \
+                    "\n".join(lines)
+            })
     start_chat_loop()    
