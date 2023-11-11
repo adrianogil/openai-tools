@@ -1,11 +1,14 @@
 import requests
+import os
 
 def upload_pdf(pdf_path):
+    api_key =  os.environ["CHATPDF_API_KEY"]
+
     files = [
         ('file', ('file', open(pdf_path, 'rb'), 'application/octet-stream'))
     ]
     headers = {
-        'x-api-key': 'sec_xxxxxx'
+        'x-api-key': api_key
     }
 
     response = requests.post(

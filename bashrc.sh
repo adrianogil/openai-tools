@@ -68,3 +68,9 @@ function openai-chatgpt-korean-translate()
 {
     python3 -m openaitools.chatgpt.languages.korean.translateto $1
 }
+
+function chatpdf-upload-pdf()
+{
+    pdf_path=$1
+    python3 -m openaitools.chatpdf.uploadcli ${pdf_path}
+}
