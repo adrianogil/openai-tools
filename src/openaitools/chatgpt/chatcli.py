@@ -1,10 +1,13 @@
 import datetime
-import openai
+from openai import OpenAI
 import json
 import os
 
 
-openai.api_key = os.environ["CHATGPT_API_KEY"]
+openai_api_key = os.environ["CHATGPT_API_KEY"]
+client = OpenAI(
+    api_key=openai_api_key,
+)
 
 data_environ_var = "CHATGPT_CHAT_BKP_DIR"
 default_chat_data_folder = os.environ[data_environ_var] if data_environ_var in os.environ else os.path.join(os.environ["HOME"], ".chatgpt")
@@ -36,10 +39,10 @@ note_data = {
 
 def get_chatgpt_output(user_input="Hello world!"):
     note_data["messages"].append({"role": "user", "content": user_input})
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=note_data["messages"])
+    completion = client.chat.completions.create(model="gpt-3.5-turbo", messages=note_data["messages"])
     chatgpt_output = completion.choices[0].message.content
     note_data["messages"].append({"role": "assistant", "content": chatgpt_output})
-    
+
     if note_data["subject"]:
         file_name = f"{time_file_name} - {note_data['subject']}.json"
     else:
@@ -121,4 +124,4 @@ if __name__ == '__main__':
                 "content": f"I'll present a file in path '{attachment_file}' with the content below. \n\n" + \
                     "\n".join(lines)
             })
-    start_chat_loop()    
+    start_chat_loop()
